@@ -5,4 +5,23 @@ services:
     ports:
       - 30303:30303
       - 8545:8545
-    entrypoint: ["geth", "--http", "--http.addr", "0.0.0.0"]
+    entrypoint: [ "geth", "--http", "--http.addr", "0.0.0.0" ]
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--no-cache",
+          "-S",
+          "--headers",
+          "'Content-Type: application/json'",
+          "--post-data",
+          "'{\"jsonrpc\":\"2.0\",
+            \"method\":\"web3_clientVersion\",\"params\":[],\"id\":1}'",
+          "0.0.0.0:8545/'",
+          "--delete-after"
+        ]
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
