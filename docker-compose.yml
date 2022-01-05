@@ -6,6 +6,8 @@ services:
       - 30303:30303
       - 8545:8545
     entrypoint: [ "geth", "--http", "--http.addr", "0.0.0.0" ]
+    volumes:
+      - geth_data:/root/.ethereum
     healthcheck:
       test:
         [
@@ -25,3 +27,6 @@ services:
       timeout: 30s
       retries: 5
       start_period: 30s
+
+volumes:
+  geth_data:
