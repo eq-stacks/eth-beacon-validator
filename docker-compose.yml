@@ -9,11 +9,13 @@ services:
     volumes:
       - geth_data:/root/.ethereum
     healthcheck:
-      test: "wget --no-cache -S --header 'Content-Type: application/json' --post-data='{\"jsonrpc\":2.0,\"method\":\"web3_clientVersion\",\"params\":[],\"id\":1}' 0.0.0.0:8545 -O-"
+      test: "wget --no-cache -S --header 'Content-Type: application/json'
+        --post-data='{\"jsonrpc\":2.0,\"method\":\"web3_clientVersion\",\"params\
+        \":[],\"id\":1}' 0.0.0.0:8545 -O-"
       interval: 1m30s
       timeout: 30s
       retries: 5
       start_period: 30s
 
 volumes:
-  geth_data: null
+  geth_data:
