@@ -30,6 +30,14 @@ services:
           - node.labels.chaindata == true
     volumes:
       - geth_data:/root/.ethereum
+    networks:
+      - traefik-swarm
+    labels:
+      - traefik.enable="true"
+      - traefik.http.routers.eth-${GETH_NETWORK:-mainnet}.rule="Host(`eth.rpc.${GETH_NETWORK:-mainnet}.lan`)"
+      - traefik.http.routers.eth-${GETH_NETWORK:-mainnet}.entryPoints="web"
+      - traefik.http.routers.eth-${GETH_NETWORK:-mainnet}.service="eth-${GETH_NETWORK:-mainnet}"
+      - traefik.http.services.eth-${GETH_NETWORK:-mainnet}.loadbalancer.server.port="8123"
     healthcheck:
       test: "wget --no-cache -S --header 'Content-Type: application/json'
         --post-data='{\"jsonrpc\":2.0,\"method\":\"web3_clientVersion\",\"params\
