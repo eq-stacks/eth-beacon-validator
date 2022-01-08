@@ -33,17 +33,17 @@ services:
     networks:
       - traefik-swarm
     labels:
-      - traefik.enable="true"
-      - traefik.http.routers.eth-${GETH_NETWORK:-mainnet}-http.rule="Host(`eth.rpc.${GETH_NETWORK:-mainnet}.${GETH_DOMAIN:-lan}`)"
-      - traefik.http.routers.eth-${GETH_NETWORK:-mainnet}-http.entryPoints="web"
-      - traefik.http.routers.eth-${GETH_NETWORK:-mainnet}-http.middlewares="eth-${GETH_NETWORK:-mainnet}-https"
-      - traefik.http.middlewares.eth-${GETH_NETWORK:-mainnet}-https.redirectscheme.scheme="https"
-      - traefik.http.routers.eth-${GETH_NETWORK:-mainnet}.rule="Host(`eth.rpc.${GETH_NETWORK:-mainnet}.${GETH_DOMAIN:-lan}`)"
-      - traefik.http.routers.eth-${GETH_NETWORK:-mainnet}.entryPoints="websecure"
-      - traefik.http.routers.eth-${GETH_NETWORK:-mainnet}.service="eth-${GETH_NETWORK:-mainnet}"
-      - traefik.http.routers.eth-${GETH_NETWORK:-mainnet}.tls="true"
-      - traefik.http.routers.eth-${GETH_NETWORK:-mainnet}.tls.certresolver="letsencrypt"
-      - traefik.http.services.eth-${GETH_NETWORK:-mainnet}.loadbalancer.server.port="8545"
+      - traefik.enable=true
+      - traefik.http.routers.eth-${GETH_NETWORK:-mainnet}-http.rule=Host(`eth.rpc.${GETH_NETWORK:-mainnet}.${GETH_DOMAIN:-lan}`)
+      - traefik.http.routers.eth-${GETH_NETWORK:-mainnet}-http.entryPoints=web
+      - traefik.http.routers.eth-${GETH_NETWORK:-mainnet}-http.middlewares=eth-${GETH_NETWORK:-mainnet}-https
+      - traefik.http.middlewares.eth-${GETH_NETWORK:-mainnet}-https.redirectscheme.scheme=https
+      - traefik.http.routers.eth-${GETH_NETWORK:-mainnet}.rule=Host(`eth.rpc.${GETH_NETWORK:-mainnet}.${GETH_DOMAIN:-lan}`)
+      - traefik.http.routers.eth-${GETH_NETWORK:-mainnet}.entryPoints=websecure
+      - traefik.http.routers.eth-${GETH_NETWORK:-mainnet}.service=eth-${GETH_NETWORK:-mainnet}
+      - traefik.http.routers.eth-${GETH_NETWORK:-mainnet}.tls=true
+      - traefik.http.routers.eth-${GETH_NETWORK:-mainnet}.tls.certresolver=letsencrypt
+      - traefik.http.services.eth-${GETH_NETWORK:-mainnet}.loadbalancer.server.port=8545
     healthcheck:
       test: "wget --no-cache -S --header 'Content-Type: application/json'
         --post-data='{\"jsonrpc\":2.0,\"method\":\"web3_clientVersion\",\"params\
