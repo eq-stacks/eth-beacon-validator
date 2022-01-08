@@ -3,13 +3,15 @@ services:
   geth:
     image: ethereum/client-go:v1.10.15
     ports:
-      - 30303:30303
+      - "${GETH_NETWORK_PORT:-30303}:30303"
       - "${GETH_RPC_PORT:-8545}:8545"
     # GETH_NETWORK is one of mainnet (default) | goerli | rinkeby | ropsten
     entrypoint:
       [
         "geth",
         "--${GETH_NETWORK:-mainnet}",
+        "--port",
+        "${GETH_NETWORK_PORT:-30303}",
         "--http",
         "--http.addr",
         "0.0.0.0",
@@ -25,7 +27,7 @@ services:
     healthcheck:
       test: "wget --no-cache -S --header 'Content-Type: application/json'
         --post-data='{\"jsonrpc\":2.0,\"method\":\"web3_clientVersion\",\"params\
-        \":[],\"id\":1}' 0.0.0.0:8545 -O-"
+        \":[],\"id\":1}' 0.0.0.0:${GETH_RPC_PORT:-8545} -O-"
       interval: 1m30s
       timeout: 30s
       retries: 5
