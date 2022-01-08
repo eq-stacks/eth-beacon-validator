@@ -4,9 +4,18 @@ services:
     image: ethereum/client-go:v1.10.15
     ports:
       - 30303:30303
-      - 8545:8545
+      - "${GETH_RPC_PORT:-8545}:8545"
     # GETH_NETWORK is one of mainnet (default) | goerli | rinkeby | ropsten
-    entrypoint: [ "geth", "--${GETH_NETWORK:-mainnet}", "--http", "--http.addr", "0.0.0.0" ]
+    entrypoint:
+      [
+        "geth",
+        "--${GETH_NETWORK:-mainnet}",
+        "--http",
+        "--http.addr",
+        "0.0.0.0",
+        "--http.port",
+        "${GETH_RPC_PORT:-8545}"
+      ]
     deploy:
       placement:
         constraints:
