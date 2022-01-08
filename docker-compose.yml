@@ -4,7 +4,8 @@ services:
     image: ethereum/client-go:v1.10.15
     ports:
       - "${GETH_NETWORK_PORT:-30303}:30303"
-      - "${GETH_RPC_PORT:-8545}:8545"
+      - "${GETH_HTTP_RPC_PORT:-8545}:8545"
+      - "${GETH_WS_RPC_PORT:-8546}:8546"
     # GETH_NETWORK is one of mainnet (default) | goerli | rinkeby | ropsten
     entrypoint:
       [
@@ -16,7 +17,12 @@ services:
         "--http.addr",
         "0.0.0.0",
         "--http.port",
-        "${GETH_RPC_PORT:-8545}"
+        "${GETH_HTTP_RPC_PORT:-8545}",
+        "--ws",
+        "--ws.addr",
+        "0.0.0.0",
+        "--ws.port",
+        "${GETH_WS_RPC_PORT:-8546}"
       ]
     deploy:
       placement:
@@ -27,7 +33,7 @@ services:
     healthcheck:
       test: "wget --no-cache -S --header 'Content-Type: application/json'
         --post-data='{\"jsonrpc\":2.0,\"method\":\"web3_clientVersion\",\"params\
-        \":[],\"id\":1}' 0.0.0.0:${GETH_RPC_PORT:-8545} -O-"
+        \":[],\"id\":1}' 0.0.0.0:${GETH_HTTP_RPC_PORT:-8545} -O-"
       interval: 1m30s
       timeout: 30s
       retries: 5
