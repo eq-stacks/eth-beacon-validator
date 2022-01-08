@@ -6,6 +6,10 @@ services:
       - 30303:30303
       - 8545:8545
     entrypoint: [ "geth", "--http", "--http.addr", "0.0.0.0" ]
+    deploy:
+      placement:
+        constraints:
+          - node.labels.chaindata == true
     volumes:
       - geth_data:/root/.ethereum
     healthcheck:
