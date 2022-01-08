@@ -43,7 +43,7 @@ services:
       - traefik.http.routers.eth-${GETH_NETWORK:-mainnet}.service=eth-${GETH_NETWORK:-mainnet}
       - traefik.http.routers.eth-${GETH_NETWORK:-mainnet}.tls=true
       - traefik.http.routers.eth-${GETH_NETWORK:-mainnet}.tls.certresolver=letsencrypt
-      - traefik.http.services.eth-${GETH_NETWORK:-mainnet}.loadbalancer.server.port=8545
+      - traefik.http.services.eth-${GETH_NETWORK:-mainnet}.loadbalancer.server.port=${GETH_HTTP_RPC_PORT:-8545}
     healthcheck:
       test: "wget --no-cache -S --header 'Content-Type: application/json'
         --post-data='{\"jsonrpc\":2.0,\"method\":\"web3_clientVersion\",\"params\
