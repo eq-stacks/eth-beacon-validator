@@ -33,7 +33,10 @@ services:
     volumes:
       - geth_data:/root/.ethereum
     networks:
-      - traefik-swarm
+      traefik-swarm:
+      default:
+        aliases:
+          - geth-${GETH_NETWORK:-mainnet}
     labels:
       - traefik.enable=true
       - traefik.http.routers.eth-${GETH_NETWORK:-mainnet}-http.rule=Host(`eth.rpc.${GETH_NETWORK:-mainnet}.${GETH_DOMAIN:-lan}`)
@@ -55,6 +58,32 @@ services:
       retries: 5
       start_period: 30s
 
+  nimbus_beacon_node:
+    image: statusim/nimbus-eth2:amd64-latest
+    restart: unless-stopped
+    stop_grace_period: 1m
+    ports:
+      - 127.0.0.1:9190:9190/tcp
+      - 127.0.0.1:8008:8008/tcp
+      - 9000:9000/tcp
+      - 9000:9000/udp
+    volumes:
+      - nibmus_data:/home/user/nimbus-eth2/build/data
+    command: >-
+      --network=prater
+      --data-dir=/home/user/nimbus-eth2/build/data/shared_prater_0
+      --web3-url=ws://geth-${GETH_NETWORK:-mainnet}:${GETH_WS_RPC_PORT:-8546}
+      --nat=extip:${NIMBUS_EXTERNAL_IP}
+      --log-level=DEBUG
+      --tcp-port=9000
+      --udp-port=9000
+      --rpc
+      --rpc-address=0.0.0.0
+      --rpc-port=9190
+      --metrics
+      --metrics-address=0.0.0.0
+      --metrics-port=8008
+
 volumes:
   geth_data:
     driver: local
@@ -62,6 +91,12 @@ volumes:
       type: 'none'
       o: 'bind'
       device: '/srv/nfs/docker/volumes/geth_${GETH_NETWORK:-mainnet}_data'
+  nibmus_data:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '/srv/nfs/docker/volumes/nimbus_${NIMBUS_NETWORK:-prater}_data'
 
 networks:
   traefik-swarm:
