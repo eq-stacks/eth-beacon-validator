@@ -4,9 +4,6 @@ services:
     image: ethereum/client-go:v1.10.15
     ports:
       - "${GETH_NETWORK_PORT:-30303}:30303"
-      - "${GETH_HTTP_RPC_PORT:-8545}:8545"
-      - "${GETH_WS_RPC_PORT:-8546}:8546"
-    # GETH_NETWORK is one of mainnet (default) | goerli | rinkeby | ropsten
     entrypoint:
       [
         "geth",
@@ -18,8 +15,6 @@ services:
         "0.0.0.0",
         "--http.port",
         "${GETH_HTTP_RPC_PORT:-8545}",
-        "--http.vhosts",
-        "eth.rpc.${GETH_NETWORK:-mainnet}.${GETH_DOMAIN:-lan}",
         "--ws",
         "--ws.addr",
         "0.0.0.0",
@@ -33,22 +28,9 @@ services:
     volumes:
       - geth_data:/root/.ethereum
     networks:
-      traefik-swarm:
       default:
         aliases:
           - geth-${GETH_NETWORK:-mainnet}
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.eth-${GETH_NETWORK:-mainnet}-http.rule=Host(`eth.rpc.${GETH_NETWORK:-mainnet}.${GETH_DOMAIN:-lan}`)
-      - traefik.http.routers.eth-${GETH_NETWORK:-mainnet}-http.entryPoints=web
-      - traefik.http.routers.eth-${GETH_NETWORK:-mainnet}-http.middlewares=eth-${GETH_NETWORK:-mainnet}-https
-      - traefik.http.middlewares.eth-${GETH_NETWORK:-mainnet}-https.redirectscheme.scheme=https
-      - traefik.http.routers.eth-${GETH_NETWORK:-mainnet}.rule=Host(`eth.rpc.${GETH_NETWORK:-mainnet}.${GETH_DOMAIN:-lan}`)
-      - traefik.http.routers.eth-${GETH_NETWORK:-mainnet}.entryPoints=websecure
-      - traefik.http.routers.eth-${GETH_NETWORK:-mainnet}.service=eth-${GETH_NETWORK:-mainnet}
-      - traefik.http.routers.eth-${GETH_NETWORK:-mainnet}.tls=true
-      - traefik.http.routers.eth-${GETH_NETWORK:-mainnet}.tls.certresolver=letsencrypt
-      - traefik.http.services.eth-${GETH_NETWORK:-mainnet}.loadbalancer.server.port=${GETH_HTTP_RPC_PORT:-8545}
     healthcheck:
       test: "wget --no-cache -S --header 'Content-Type: application/json'
         --post-data='{\"jsonrpc\":2.0,\"method\":\"web3_clientVersion\",\"params\
