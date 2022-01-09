@@ -69,11 +69,6 @@ services:
 volumes:
   nibmus_data:
   geth_data:
-    driver: local
-    driver_opts:
-      type: 'none'
-      o: 'bind'
-      device: '/srv/nfs/docker/volumes/geth_${GETH_NETWORK:-mainnet}_data'
 
 networks:
   traefik-swarm:
