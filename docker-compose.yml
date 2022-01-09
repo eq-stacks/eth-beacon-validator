@@ -18,6 +18,8 @@ services:
         "0.0.0.0",
         "--http.port",
         "${GETH_HTTP_RPC_PORT:-8545}",
+        "--http.vhosts",
+        "eth.rpc.${GETH_NETWORK:-mainnet}.${GETH_DOMAIN:-lan}",
         "--ws",
         "--ws.addr",
         "0.0.0.0",
