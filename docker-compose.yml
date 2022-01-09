@@ -19,9 +19,11 @@ services:
         aliases:
           - geth-${GETH_NETWORK:-mainnet}
     healthcheck:
-      test: "wget --no-cache -S --header 'Content-Type: application/json'
-        --post-data='{\"jsonrpc\":2.0,\"method\":\"web3_clientVersion\",\"params\
-        \":[],\"id\":1}' 0.0.0.0:${GETH_HTTP_RPC_PORT:-8545} -O-"
+      test: >
+        wget --no-cache -S -O-
+        --header "Content-Type: application/json"
+        --post-data='{"jsonrpc":2.0,"method":"web3_clientVersion","params":[],"id":1}'
+        0.0.0.0:${GETH_HTTP_RPC_PORT:-8545}
       interval: 1m30s
       timeout: 30s
       retries: 5
