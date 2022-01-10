@@ -73,16 +73,9 @@ services:
       --network=prater
       --data-dir=/home/user/nimbus-eth2/build/data/shared_prater_0
       --web3-url=ws://geth-${GETH_NETWORK:-mainnet}:${GETH_WS_RPC_PORT:-8546}
-      --nat=extip:${NIMBUS_EXTERNAL_IP}
-      --log-level=DEBUG
-      --tcp-port=9000
-      --udp-port=9000
-      --rpc
-      --rpc-address=0.0.0.0
-      --rpc-port=9190
-      --metrics
-      --metrics-address=0.0.0.0
-      --metrics-port=8008
+      --nat=extip:${NIMBUS_EXTERNAL_IP} --log-level=DEBUG --tcp-port=9000
+      --udp-port=9000 --rpc --rpc-address=0.0.0.0 --rpc-port=9190 --metrics
+      --metrics-address=0.0.0.0 --metrics-port=8008
 
 volumes:
   nibmus_data:
