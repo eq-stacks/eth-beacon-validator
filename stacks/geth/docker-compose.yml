@@ -61,8 +61,11 @@ services:
 
 volumes:
   geth_data:
+    name: geth-${GETH_NETWORK:-mainnet}-data
   influxdb_data:
+    name: geth-${GETH_NETWORK:-mainnet}-influxdb-data
   influxdb_config:
+    name: geth-${GETH_NETWORK:-mainnet}-influxdb-config
 
 networks:
   geth:

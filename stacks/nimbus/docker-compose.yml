@@ -27,10 +27,11 @@ services:
 
 volumes:
   nibmus_data:
+    name: nimbus-prater-data
 
 networks:
   traefik-swarm:
     external: true
   geth:
     external: true
-    name: --${GETH_NETWORK:-mainnet}
+    name: geth-${GETH_NETWORK:-mainnet}
