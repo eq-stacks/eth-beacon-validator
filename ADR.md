@@ -17,8 +17,8 @@ In this document we will catalog all decisions made regarding the architecture d
     - [Security](#security)
     - [Ethereum Clients](#ethereum-clients)
     - [Eth2 Clients](#eth2-clients)
-    - [Things we're stuck with](#things-were-stuck-with)
   - [Decision Log](#decision-log)
+    - [_2022.01.10_ - The Prater Testnet](#20220110---the-prater-testnet)
     - [_2022.01.09_ - Drive Locality](#20220109---drive-locality)
     - [_YYYY.MM.DD_ - Template Decision summary](#yyyymmdd---template-decision-summary)
 
@@ -82,7 +82,7 @@ Containerization vs Non-containerization discussion
 
 Status: Currently evaluating the Ethereum Foundation's [list of suggested Eth1 clients](https://launchpad.ethereum.org/en/select-client):
 1. Nethermind
-2. Geth
+2. Geth - imports InfluxDB
 3. Besu
 4. Erigon
 
@@ -99,12 +99,16 @@ Status: Currently evaluating the Ethereum Foundation's [list of suggested Eth2 c
 
 https://ethereum.org/en/developers/docs/nodes-and-clients/#clients
 
-
-### Things we're stuck with
-
-- InfluxDB (imported from Geth)
-
 ## Decision Log
+
+### _2022.01.10_ - The Prater Testnet
+
+There are currently two primary testnets for Eth2: Pyrmont and Prater. We will test on Prater
+
+Reasoning:
+1. Prater is officially represented by an Ethereum Foundation subdomain
+2. Prater is meant to be the successor of Pyrmont
+3. Prater's purpose is to emulate 2x the amount of mainnet traffic to stress-test validator implementations
 
 ### _2022.01.09_ - Drive Locality
 
