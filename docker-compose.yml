@@ -38,6 +38,8 @@ services:
   influxdb:
     image: influxdb:2.1
     restart: unless-stopped
+    ports:
+      - 8086:8086
     volumes:
       - influxdb_data:/var/lib/influxdb
     environment:
