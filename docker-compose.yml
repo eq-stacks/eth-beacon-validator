@@ -49,6 +49,7 @@ services:
       - DOCKER_INFLUXDB_INIT_PASSWORD
       - DOCKER_INFLUXDB_INIT_ORG
       - DOCKER_INFLUXDB_INIT_BUCKET
+      - DOCKER_INFLUXDB_INIT_RETENTION
     deploy:
       placement:
         constraints:
