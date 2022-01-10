@@ -5,9 +5,11 @@
 
 ### Prerequisites
 
-- One or more machines that can run [Docker] and [Docker Compose]. LTS releases
-are preferred.
-- Roughly 1 TB of SDD storage for chain data.
+- One or more machines that can run [Docker] and [Docker Compose]. LTS releases of Linux preferred
+- Roughly 1 TB of SDD storage for chain data
+- Port 9000 forwarded or a UPnP enabled router
+- (Optional) Static IP address
+- InfluxDB API Keys
 
 [Docker]: https://docs.docker.com/engine/install/ubuntu/
 [Docker Compose]: https://docs.docker.com/compose
