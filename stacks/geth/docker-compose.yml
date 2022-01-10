@@ -1,0 +1,71 @@
+version: "3.7"
+services:
+  geth:
+    image: ethereum/client-go:v1.10.15
+    ports:
+      - "${GETH_NETWORK_PORT:-30303}:30303"
+    entrypoint: >
+      geth --${GETH_NETWORK:-mainnet} --port ${GETH_NETWORK_PORT:-30303}
+           --http --http.addr 0.0.0.0 --http.port ${GETH_HTTP_RPC_PORT:-8545}
+           --ws --ws.addr 0.0.0.0 --ws.port ${GETH_WS_RPC_PORT:-8546}
+           --metrics --metrics.expensive --metrics.influxdbv2
+           --metrics.influxdb.endpoint http://influxdb:8086
+           --metrics.influxdb.database geth-${GETH_NETWORK:-mainnet}
+           --metrics.influxdb.bucket ${DOCKER_INFLUXDB_INIT_BUCKET}
+           --metrics.influxdb.organization ${DOCKER_INFLUXDB_INIT_ORG}
+           --metrics.influxdb.token ${INFLUX_TOKEN}
+    deploy:
+      placement:
+        constraints:
+          - node.labels.chaindata == true
+    volumes:
+      - geth_data:/root/.ethereum
+    networks:
+      geth:
+        aliases:
+          - geth-${GETH_NETWORK:-mainnet}
+    healthcheck:
+      test: >
+        wget --no-cache -S -O-
+        --header "Content-Type: application/json"
+        --post-data='{"jsonrpc":2.0,"method":"web3_clientVersion","params":[],"id":1}'
+        0.0.0.0:${GETH_HTTP_RPC_PORT:-8545}
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
+
+  influxdb:
+    image: influxdb:2.1
+    restart: unless-stopped
+    ports:
+      - 8086:8086
+    volumes:
+      - influxdb_data:/var/lib/influxdb2
+      - influxdb_config:/etc/influxdb2
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME
+      - DOCKER_INFLUXDB_INIT_PASSWORD
+      - DOCKER_INFLUXDB_INIT_ORG
+      - DOCKER_INFLUXDB_INIT_BUCKET
+      - DOCKER_INFLUXDB_INIT_RETENTION
+    deploy:
+      placement:
+        constraints:
+          - node.labels.metrics == true
+    networks:
+      geth:
+        aliases:
+          - influxdb
+
+volumes:
+  geth_data:
+  influxdb_data:
+  influxdb_config:
+
+networks:
+  geth:
+    driver: overlay
+    attachable: true
+    name: geth-${GETH_NETWORK:-mainnet}
