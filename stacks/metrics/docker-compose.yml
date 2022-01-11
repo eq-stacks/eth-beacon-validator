@@ -54,6 +54,23 @@ services:
       traefik.http.routers.grafana.service: "grafana"
       traefik.http.services.grafana.loadbalancer.server.port: "3000"
 
+  prometheus:
+    image: prom/prometheus
+    networks:
+      - traefik-swarm
+      - default
+      - geth
+    deploy:
+      placement:
+        constraints:
+          - node.labels.metrics == true
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.prometheus.rule: "Host(`prometheus.lan`)"
+      traefik.http.routers.prometheus.entryPoints: "web"
+      traefik.http.routers.prometheus.service: "prometheus"
+      traefik.http.services.prometheus.loadbalancer.server.port: "9090"
+
 volumes:
   grafana_data:
   influxdb_data:
