@@ -35,7 +35,6 @@ services:
       traefik.http.services.influxdb.loadbalancer.server.port: "8086"
 
   grafana:
-    container_name: grafana
     image: grafana/grafana:8.3.3
     restart: always
     networks:
@@ -56,6 +55,7 @@ services:
 
   prometheus:
     image: prom/prometheus
+    user: root
     networks:
       - traefik-swarm
       - default
@@ -77,6 +77,30 @@ services:
       traefik.http.routers.prometheus.entryPoints: "web"
       traefik.http.routers.prometheus.service: "prometheus"
       traefik.http.services.prometheus.loadbalancer.server.port: "9090"
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.43.0
+    networks:
+      - traefik-swarm
+      - default
+    deploy:
+      mode: global
+      labels:
+        prometheus-job: cadvisor
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /:/rootfs:ro
+      - /var/run:/var/run
+      - /sys:/sys:ro
+      - /var/lib/docker:/var/lib/docker:ro
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.cadvisor.rule: "Host(`cadvisor.lan`)"
+      traefik.http.routers.cadvisor.entryPoints: "web"
+      traefik.http.routers.cadvisor.service: "cadvisor"
+      traefik.http.services.cadvisor.loadbalancer.server.port: "8080"
+    command: -docker_only
+    # --mode=global --publish target=8080,mode=host \
 
 volumes:
   grafana_data:
