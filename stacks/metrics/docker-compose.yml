@@ -67,6 +67,8 @@ services:
       placement:
         constraints:
           - node.labels.metrics == true
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     labels:
       traefik.enable: "true"
       traefik.http.routers.prometheus.rule: "Host(`prometheus.lan`)"
