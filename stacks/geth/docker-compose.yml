@@ -8,7 +8,7 @@ services:
       geth --${GETH_NETWORK:-mainnet} --port ${GETH_NETWORK_PORT:-30303}
            --http --http.addr 0.0.0.0 --http.port ${GETH_HTTP_RPC_PORT:-8545}
            --ws --ws.addr 0.0.0.0 --ws.port ${GETH_WS_RPC_PORT:-8546}
-           --metrics --metrics.expensive --metrics.influxdbv2
+           --metrics --metrics.influxdbv2
            --metrics.influxdb.endpoint http://influxdb:8086
            --metrics.influxdb.database geth-${GETH_NETWORK:-mainnet}
            --metrics.influxdb.bucket ${DOCKER_INFLUXDB_INIT_BUCKET}
