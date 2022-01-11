@@ -18,6 +18,7 @@ In this document we will catalog all decisions made regarding the architecture d
     - [Ethereum Clients](#ethereum-clients)
     - [Eth2 Clients](#eth2-clients)
   - [Decision Log](#decision-log)
+    - [_2022.01.11_ - Don't submit the deposit before your validator is fully synced.](#20220111---dont-submit-the-deposit-before-your-validator-is-fully-synced)
     - [_2022.01.10_ - The Prater Testnet](#20220110---the-prater-testnet)
     - [_2022.01.09_ - Drive Locality](#20220109---drive-locality)
     - [_YYYY.MM.DD_ - Template Decision summary](#yyyymmdd---template-decision-summary)
@@ -100,6 +101,14 @@ Status: Currently evaluating the Ethereum Foundation's [list of suggested Eth2 c
 https://ethereum.org/en/developers/docs/nodes-and-clients/#clients
 
 ## Decision Log
+
+### _2022.01.11_ - Don't submit the deposit before your validator is fully synced.
+
+The beacon chain's validation system is based on the concept of periodic [epochs and slots]. Slots every 12 seconds, and your validator is expected to _attest_ at every slot. If your node is still syncing, has low peers, or is otherwise downgraded, there is a chance that it will miss attestations. *Missing attestations will result in a lower ranking on the validator leaderboard.*
+
+Thus, wait until the node is stable to make the deposit that turns it from a client into a validator.
+
+[epochs and slots]: https://ethos.dev/beacon-chain/
 
 ### _2022.01.10_ - The Prater Testnet
 
