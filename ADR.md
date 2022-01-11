@@ -3,9 +3,11 @@
 In this document we will catalog all decisions made regarding the architecture described in this repository's code. At the head of this document are the [Foundational Decisions](#foundational-decisions) that form the cornerstone of the infrastructure, followed by the [Decision Log](#decision-log) which describes the following, more granular decisions made, in chronoloigical order.
 
 **First-order Principles:**
-1. High Availability: System performance degradation or downtime simply _can't happen_.
-2. The best technology is the least technology.
-3. Prefer FOSS over proprietary software.
+1. Validation is a highly competitive practice. The higher you are on the leaderboard the better
+2. In general, your validator ranking depends on *high availability* and *low latency*
+3. Low Latency = High network throughput, high disk speed
+4. The best technology is the least technology
+5. Prefer FOSS over proprietary software
 
 - [Architectural Decision Record](#architectural-decision-record)
   - [Foundational Decisions](#foundational-decisions)
@@ -104,7 +106,7 @@ https://ethereum.org/en/developers/docs/nodes-and-clients/#clients
 
 ### _2022.01.11_ - Don't submit the deposit before your validator is fully synced.
 
-The beacon chain's validation system is based on the concept of periodic [epochs and slots]. Slots every 12 seconds, and your validator is expected to _attest_ at every slot. If your node is still syncing, has low peers, or is otherwise downgraded, there is a chance that it will miss attestations. *Missing attestations will result in a lower ranking on the validator leaderboard.*
+The beacon chain's validation system is based on the concept of periodic [epochs and slots]. Slots every 12 seconds, and your validator is expected to _attest_ every ten slots or so (given by `nextActionWait`  in the `slot end` event in the logs). If your node is still syncing, has low peers, or is otherwise downgraded, there is a chance that it will miss attestations. *Missing attestations will result in a lower ranking on the validator leaderboard.*
 
 Thus, wait until the node is stable to make the deposit that turns it from a client into a validator.
 
