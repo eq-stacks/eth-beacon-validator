@@ -60,6 +60,9 @@ services:
       - traefik-swarm
       - default
       - geth
+    configs:
+      - source: prometheus.yml
+        target: /etc/prometheus/prometheus.yml
     deploy:
       placement:
         constraints:
@@ -77,6 +80,10 @@ volumes:
     name: influxdb-data
   influxdb_config:
     name: influxdb-config
+
+configs:
+  prometheus.yml:
+    external: true
 
 networks:
   geth:
