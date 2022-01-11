@@ -88,6 +88,9 @@ configs:
     external: true
 
 networks:
+  host:
+    external: true
+    name: host
   geth:
     external: true
     name: geth-goerli
