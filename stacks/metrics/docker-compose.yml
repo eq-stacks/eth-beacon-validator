@@ -57,9 +57,11 @@ services:
     image: prom/prometheus
     user: root
     networks:
-      - traefik-swarm
-      - default
-      - geth
+      geth:
+      traefik-swarm:
+      default:
+        aliases:
+          - prometheus
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     configs:
