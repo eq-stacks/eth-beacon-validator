@@ -53,6 +53,28 @@ services:
       traefik.http.routers.grafana.service: "grafana"
       traefik.http.services.grafana.loadbalancer.server.port: "3000"
 
+  node_exporter:
+    image: quay.io/prometheus/node-exporter:latest
+    container_name: node_exporter
+    ports:
+      - 9100:9100
+    deploy:
+      mode: global
+      labels:
+        prometheus-job: node_exporter
+    restart: unless-stopped
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+      - /etc/hostname:/etc/nodename
+    command:
+      - '--path.sysfs=/host/sys'
+      - '--path.procfs=/host/proc'
+      - '--collector.textfile.directory=/etc/node-exporter/'
+      - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
+      - '--no-collector.ipvs'
+
   prometheus:
     image: prom/prometheus
     user: root
@@ -85,6 +107,8 @@ services:
     networks:
       - traefik-swarm
       - default
+    ports:
+      - 8081:8080
     deploy:
       mode: global
       labels:
@@ -102,7 +126,6 @@ services:
       traefik.http.routers.cadvisor.service: "cadvisor"
       traefik.http.services.cadvisor.loadbalancer.server.port: "8080"
     command: -docker_only
-    # --mode=global --publish target=8080,mode=host \
 
 volumes:
   grafana_data:
