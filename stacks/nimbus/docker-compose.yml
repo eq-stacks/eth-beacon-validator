@@ -13,8 +13,7 @@ services:
         constraints:
           - node.labels.chaindata == true
     ports:
-      # - 127.0.0.1:9190:9190/tcp
-      - 127.0.0.1:8008:8008/tcp
+      - 8008:8008
       - 9000:9000/tcp
       - 9000:9000/udp
     volumes:
@@ -25,7 +24,6 @@ services:
       --web3-url=ws://geth-${GETH_NETWORK:-mainnet}:${GETH_WS_RPC_PORT:-8546}
       --nat=extip:${NIMBUS_EXTERNAL_IP} --log-level=${NIMBUS_LOG_LEVEL:-INFO} --tcp-port=9000
       --udp-port=9000 --metrics-address=0.0.0.0 --metrics-port=8008
-# --rpc --rpc-address=0.0.0.0 --rpc-port=9190 --metrics
 
 volumes:
   nibmus_data:
