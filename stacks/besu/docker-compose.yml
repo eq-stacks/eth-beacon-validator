@@ -1,0 +1,16 @@
+version: "3.7"
+services:
+  besu:
+    image: hyperledger/besu:22.1
+    volumes:
+      - besu_data:/mdata
+    command: >-
+      --network=goerli
+
+volumes:
+  besu_data:
+    name: besu-data
+
+networks:
+  rpc:
+    external: true
