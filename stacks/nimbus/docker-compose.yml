@@ -7,6 +7,8 @@ services:
     networks:
       - geth
     deploy:
+      labels:
+        prometheus-job: nimbus
       placement:
         constraints:
           - node.labels.chaindata == true
