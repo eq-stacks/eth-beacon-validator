@@ -1,2 +1,4 @@
 .env
 inventory
+validator_keys
+mnemonic
