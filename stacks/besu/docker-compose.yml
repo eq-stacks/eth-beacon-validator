@@ -2,15 +2,28 @@ version: "3.7"
 services:
   besu:
     image: hyperledger/besu:22.1
+    deploy:
+      placement:
+        constraints:
+          - node.labels.chaindata == true
+    networks:
+      besu:
+        aliases:
+          - besu-${BESU_NETWORK:-mainnet}
     volumes:
-      - besu_data:/mdata
+      - besu_data:/opt/besu/database
     command: >-
-      --network=goerli
+      --network=${BESU_NETWORK:-mainnet}
+      --logging=${BESU_LOGLVEL:-WARN}
 
 volumes:
   besu_data:
     name: besu-data
 
 networks:
+  besu:
+    driver: overlay
+    attachable: true
+    name: besu-${BESU_NETWORK:-mainnet}
   rpc:
     external: true
