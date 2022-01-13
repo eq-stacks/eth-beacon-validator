@@ -1,39 +1,5 @@
 version: "3.7"
 services:
-  influxdb:
-    image: influxdb:2.1
-    restart: unless-stopped
-    ports:
-      - 8086:8086
-    volumes:
-      - influxdb_data:/var/lib/influxdb2
-      - influxdb_config:/etc/influxdb2
-    environment:
-      - DOCKER_INFLUXDB_INIT_MODE=setup
-      - DOCKER_INFLUXDB_INIT_ORG
-      - DOCKER_INFLUXDB_INIT_BUCKET
-      - DOCKER_INFLUXDB_INIT_RETENTION
-      - DOCKER_INFLUXDB_INIT_PASSWORD
-      - DOCKER_INFLUXDB_INIT_USERNAME
-    deploy:
-      placement:
-        constraints:
-          - node.labels.metrics == true
-    networks:
-      traefik-swarm:
-      default:
-        aliases:
-          - influxdb
-      geth:
-        aliases:
-          - influxdb
-    labels:
-      traefik.enable: "true"
-      traefik.http.routers.influxdb.rule: "Host(`influxdb.lan`)"
-      traefik.http.routers.influxdb.entryPoints: "web"
-      traefik.http.routers.influxdb.service: "influxdb"
-      traefik.http.services.influxdb.loadbalancer.server.port: "8086"
-
   grafana:
     image: grafana/grafana:8.3.3
     restart: always
