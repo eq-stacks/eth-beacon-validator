@@ -71,9 +71,11 @@ Containerization vs Non-containerization discussion
 
 | Function | Chosen Tech | Rationale | Alternatives |
 | -------- | ----------- | --------- | ------------ |
-| Containerization | Docker | TBD | Podman, Systemd services |
-| Container Orchestration | Docker Swarm | TBD | Kubernetes |
+| Container runtime | Docker | [Soon to be CRI] | Podman, Systemd services |
+| Container Orchestration | Kubernetes| Cloud Provider support, eventual push-button deployments | Docker Swarm |
 | Configuration | TBD | Env vars, docker-compose.yaml, templated files, docker configs |
+
+[Soon to be CRI]: https://kubernetes.io/blog/2020/12/02/dont-panic-kubernetes-and-docker/
 
 ### Security
 
