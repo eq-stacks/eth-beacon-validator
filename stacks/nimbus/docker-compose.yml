@@ -19,11 +19,11 @@ services:
     volumes:
       - nibmus_data:/home/user/nimbus-eth2/build/data
     command: >-
-      --network=prater
+      --network=prater --tcp-port=9000 --udp-port=9000
       --data-dir=/home/user/nimbus-eth2/build/data/shared_prater_0
       --web3-url=ws://geth-${GETH_NETWORK:-mainnet}:${GETH_WS_RPC_PORT:-8546}
-      --nat=extip:${NIMBUS_EXTERNAL_IP} --log-level=${NIMBUS_LOG_LEVEL:-INFO} --tcp-port=9000
-      --udp-port=9000 --metrics-address=0.0.0.0 --metrics-port=8008
+      --nat=extip:${NIMBUS_EXTERNAL_IP} --log-level=${NIMBUS_LOG_LEVEL:-INFO}
+      --metrics --metrics-address=0.0.0.0 --metrics-port=8008
 
 volumes:
   nibmus_data:
