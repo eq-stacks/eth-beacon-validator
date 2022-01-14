@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: goerli-geth
+spec:
+  serviceName: goerli-geth
+  selector:
+    matchLabels:
+      app: goerli-geth
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: goerli-geth
+    spec:
+      containers:
+        - name: goerli-geth
+          args: [
+            "--goerli",
+            "--port=30303",
+            "--ws",
+            "--ws.addr=0.0.0.0",
+            "--ws.port=8546",
+            "--pprof",
+            "--pprof.addr=0.0.0.0",
+            "--pprof.port=6060"
+          ]
+          image: ethereum/client-go:v1.10.15
+          resources:
+            limits:
+              memory: 12000Mi
+            requests:
+              memory: 10000Mi
+          livenessProbe:
+            exec:
+              command: 
+                - wget
+                - --no-cache
+                - -S 
+                - -O-
+                - '--header "Content-Type: application/json"'
+                - --post-data='{"jsonrpc":2.0,"method":"web3_clientVersion","params":[],"id":1}'
+                - 0.0.0.0:8545
+            failureThreshold: 5
+            initialDelaySeconds: 30
+            periodSeconds: 90
+            timeoutSeconds: 30
+          ports:
+            - containerPort: 30303
+            - containerPort: 6060
+          resources: {}
+          volumeMounts:
+            - mountPath: /root/.ethereum
+              name: goerli-geth-data
+      restartPolicy: Always
+      volumes:
+        - name: goerli-geth-data
+          persistentVolumeClaim:
+            claimName: goerli-geth-data
