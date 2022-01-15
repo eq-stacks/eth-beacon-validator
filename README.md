@@ -5,15 +5,19 @@
 
 ### Prerequisites
 
-- One or more machines that can run [Docker] and [Docker Compose]. LTS releases of Linux preferred
-- Roughly 1 TB of SDD storage for chain data
-- Port 9000 forwarded or a UPnP enabled router
+- One or more machines that can run [Kubernetes] (or [minikube] locally)
+- Roughly 1 TB of SSD storage for chain data
+- Ports 30303 and 9000 open
 - (Optional) Static IP address
-- InfluxDB API Keys
 
-[Docker]: https://docs.docker.com/engine/install/ubuntu/
-[Docker Compose]: https://docs.docker.com/compose
+[Kubernetes]: https://kubernetes.io/docs/tasks/tools/
+[minikube]: https://minikube.sigs.k8s.io/docs/start/
 
-## Usage
+### Local installation
 
-See [.env.example](./.env.example) for configuration variables and instructions.
+Once the prerequisites are in place, simply run `make` to start the minikube cluster and apply the
+configuration for geth and nimbus.
+
+```
+make
+```
