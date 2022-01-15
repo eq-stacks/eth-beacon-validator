@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: prater-nimbus
+spec:
+  selector:
+    app: prater-nimbus
+  ports:
+    - name: "9000"
+      port: 9000
+      targetPort: 9000
+    - name: "8008"
+      port: 8008
+      targetPort: 8008
+status:
+  loadBalancer: {}

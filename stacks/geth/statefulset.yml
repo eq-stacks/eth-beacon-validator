@@ -48,6 +48,7 @@ spec:
           ports:
             - containerPort: 30303
             - containerPort: 6060
+            - containerPort: 8546
           resources: {}
           volumeMounts:
             - mountPath: /root/.ethereum

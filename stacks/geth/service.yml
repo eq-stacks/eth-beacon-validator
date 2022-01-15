@@ -12,5 +12,8 @@ spec:
     - name: "6060"
       port: 6060
       targetPort: 6060
+    - name: "8546"
+      port: 8546
+      targetPort: 8546
 status:
   loadBalancer: {}

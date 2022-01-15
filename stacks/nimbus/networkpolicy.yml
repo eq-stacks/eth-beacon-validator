@@ -1,0 +1,14 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  creationTimestamp: null
+  name: prater-nimbus
+spec:
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: prater-nimbus
+  podSelector:
+    matchLabels:
+      app: prater-nimbus
