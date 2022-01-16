@@ -9,12 +9,12 @@ spec:
     app: goerli-geth
   ports:
     - port: 30303
-      name: 'eth1-listener'
+      name: 'rlpx-listener'
       targetPort: 30303
       nodePort: 30303
       protocol: TCP
     - port: 30303
-      name: 'eth1-discovery'
+      name: 'rlpx-discovery'
       targetPort: 30303
       nodePort: 30303
       protocol: UDP
