@@ -53,5 +53,11 @@ spec:
       restartPolicy: Always
       volumes:
         - name: goerli-geth-data
-          persistentVolumeClaim:
-            claimName: goerli-geth-data
+          ephemeral:
+            volumeClaimTemplate:
+              spec:
+                storageClassName: "linode-block-storage"
+                accessModes: [ "ReadWriteOnce" ]
+                resources:
+                  requests:
+                    storage: 50Gi

@@ -53,5 +53,11 @@ spec:
       restartPolicy: Always
       volumes:
         - name: prater-nimbus-data
-          persistentVolumeClaim:
-            claimName: prater-nimbus-data
+          ephemeral:
+            volumeClaimTemplate:
+              spec:
+                storageClassName: "linode-block-storage"
+                accessModes: [ "ReadWriteOnce" ]
+                resources:
+                  requests:
+                    storage: 50Gi
