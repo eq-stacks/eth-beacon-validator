@@ -27,7 +27,7 @@ spec:
       restartPolicy: Always
       containers:
       - name: goerli-besu
-        image: hyperledger/besu:22.1
+        image: hyperledger/besu:21.10.7
         resources:
           limits:
             memory: 2Gi
