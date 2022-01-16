@@ -4,6 +4,7 @@ metadata:
   labels:
     app: prater-nimbusku
   name: prater-nimbus-data
+  namespace: validators
 spec:
   accessModes:
     - ReadWriteOnce
