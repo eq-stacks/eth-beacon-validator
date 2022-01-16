@@ -10,3 +10,6 @@ spec:
     - name: "ws-rpc"
       port: 8546
       targetPort: 8546
+    - name: "metrics"
+      port: 9545
+      targetPort: 9545
