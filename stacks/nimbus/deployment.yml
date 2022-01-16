@@ -28,7 +28,7 @@ spec:
         - name: prater-nimbus
           resources:
               limits:
-                memory: "4Gi"
+                memory: "2Gi"
                 cpu: "500m"
           args: [
             "--network=prater",
