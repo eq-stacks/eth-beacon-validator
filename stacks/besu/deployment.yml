@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: goerli-besu
+  namespace: validators
+spec:
+  selector:
+    matchLabels:
+      app: goerli-besu
+  template:
+    metadata:
+      labels:
+        app: goerli-besu
+    spec:
+      containers:
+      - name: goerli-besu
+        image: hyperledger/besu:22.1
+        resources:
+          limits:
+            memory: 2Gi
+            cpu: "500m"
+        # ports:
+        # - containerPort: <Port>
