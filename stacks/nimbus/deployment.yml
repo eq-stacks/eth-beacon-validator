@@ -28,9 +28,11 @@ spec:
       containers:
         - name: prater-nimbus
           resources:
+              requests:
+                cpu: "2"
               limits:
                 memory: "2Gi"
-                cpu: "500m"
+                cpu: "2"
           args: [
             "--network=prater",
             "--tcp-port=30900",

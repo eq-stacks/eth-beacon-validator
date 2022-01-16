@@ -29,9 +29,11 @@ spec:
       - name: goerli-besu
         image: hyperledger/besu:21.10.7
         resources:
+          requests:
+            cpu: "2"
           limits:
-            memory: 2Gi
-            cpu: "500m"
+            memory: 4Gi
+            cpu: "2"
         ports:
           - containerPort: 30304
           - containerPort: 8546
