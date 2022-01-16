@@ -4,6 +4,7 @@ metadata:
   name: goerli-besu
   namespace: validators
 spec:
+  revisionHistoryLimit: 0
   selector:
     matchLabels:
       app: goerli-besu
