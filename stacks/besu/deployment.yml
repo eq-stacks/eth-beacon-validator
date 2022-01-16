@@ -33,12 +33,29 @@ spec:
             memory: 2Gi
             cpu: "500m"
         ports:
-          - containerPort: 30303
+          - containerPort: 30304
           - containerPort: 8546
+          - containerPort: 9545
+        command:
+          - "besu"
+          - "--network=goerli"
+          - "--logging=DEBUG"
+          - "--rpc-ws-enabled"
+          - "--rpc-ws-port=8546"
+          - "--metrics-enabled"
+          - "--metrics-host=0.0.0.0"
+          - "--metrics-port=9545"
+          - "--p2p-port=30304"
         volumeMounts:
-          - mountPath: /opt/besu/database
+          - mountPath: /opt/besu/database/
             name: goerli-besu-data
       volumes:
         - name: goerli-besu-data
-          persistentVolumeClaim:
-            claimName: goerli-besu-data
+          ephemeral:
+            volumeClaimTemplate:
+              spec:
+                storageClassName: "linode-block-storage"
+                accessModes: [ "ReadWriteOnce" ]
+                resources:
+                  requests:
+                    storage: 50Gi
