@@ -1,9 +1,9 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
   name: goerli-geth
+  namespace: validators
 spec:
-  serviceName: goerli-geth
   selector:
     matchLabels:
       app: goerli-geth
@@ -15,6 +15,10 @@ spec:
     spec:
       containers:
         - name: goerli-geth
+          resources:
+            limits:
+              memory: "4Gi"
+              cpu: "500m"
           args: [
             "--goerli",
             "--port=30303",
@@ -26,11 +30,6 @@ spec:
             "--pprof.port=6060"
           ]
           image: ethereum/client-go:v1.10.15
-          resources:
-            limits:
-              memory: 12000Mi
-            requests:
-              memory: 10000Mi
           livenessProbe:
             exec:
               command: 
@@ -38,9 +37,7 @@ spec:
                 - --no-cache
                 - -S 
                 - -O-
-                - '--header "Content-Type: application/json"'
-                - --post-data='{"jsonrpc":2.0,"method":"web3_clientVersion","params":[],"id":1}'
-                - 0.0.0.0:8545
+                - "0.0.0.0:6060/debug/metrics/prometheus"
             failureThreshold: 5
             initialDelaySeconds: 30
             periodSeconds: 90
@@ -49,7 +46,6 @@ spec:
             - containerPort: 30303
             - containerPort: 6060
             - containerPort: 8546
-          resources: {}
           volumeMounts:
             - mountPath: /root/.ethereum
               name: goerli-geth-data

@@ -4,6 +4,7 @@ metadata:
   labels:
     app: goerli-geth
   name: goerli-geth-data
+  namespace: validators
 spec:
   accessModes:
     - ReadWriteOnce

@@ -1,9 +1,9 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
   name: prater-nimbus
+  namespace: validators
 spec:
-  serviceName: prater-nimbus
   selector:
     matchLabels:
       app: prater-nimbus
@@ -13,30 +13,39 @@ spec:
       labels:
         app: prater-nimbus
     spec:
+      initContainers:
+        - name: chown
+          image: busybox
+          command:
+            - chown
+            - -R
+            - "1000:1000"
+            - /home/user/nimbus-eth2/build/data
+          volumeMounts:
+            - mountPath: /home/user/nimbus-eth2/build/data
+              name: prater-nimbus-data
       containers:
         - name: prater-nimbus
+          resources:
+              limits:
+                memory: "4Gi"
+                cpu: "500m"
           args: [
             "--network=prater",
-            "--tcp-port=9000",
-            "--udp-port=9000",
+            "--tcp-port=30900",
+            "--udp-port=30900",
             "--enr-auto-update",
             "--data-dir=/home/user/nimbus-eth2/build/data/shared_prater_0",
-            "--web3-url=ws://goerli-geth:8546",
+            "--web3-url=ws://goerli-geth.validators.svc.cluster.local:8546",
             "--log-level=INFO",
             "--metrics",
             "--metrics-address=0.0.0.0",
             "--metrics-port=8008"
           ]
           image: statusim/nimbus-eth2:amd64-latest
-          resources:
-            limits:
-              memory: 12000Mi
-            requests:
-              memory: 10000Mi
           ports:
-            - containerPort: 9000
+            - containerPort: 30900
             - containerPort: 8008
-          resources: {}
           volumeMounts:
             - mountPath: /home/user/nimbus-eth2/build/data
               name: prater-nimbus-data
