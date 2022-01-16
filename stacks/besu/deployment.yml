@@ -12,6 +12,18 @@ spec:
       labels:
         app: goerli-besu
     spec:
+      initContainers:
+        - name: chown
+          image: busybox
+          command:
+            - chown
+            - -R
+            - "1000:1000"
+            - /opt/besu/database
+          volumeMounts:
+            - mountPath: /opt/besu/database
+              name: goerli-besu-data
+      restartPolicy: Always
       containers:
       - name: goerli-besu
         image: hyperledger/besu:22.1
@@ -19,5 +31,13 @@ spec:
           limits:
             memory: 2Gi
             cpu: "500m"
-        # ports:
-        # - containerPort: <Port>
+        ports:
+          - containerPort: 30303
+          - containerPort: 8546
+        volumeMounts:
+          - mountPath: /opt/besu/database
+            name: goerli-besu-data
+      volumes:
+        - name: goerli-besu-data
+          persistentVolumeClaim:
+            claimName: goerli-besu-data
