@@ -17,7 +17,7 @@ spec:
         - name: goerli-geth
           resources:
             limits:
-              memory: "4Gi"
+              memory: "2Gi"
               cpu: "500m"
           args: [
             "--goerli",
