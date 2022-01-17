@@ -57,7 +57,6 @@ spec:
           ephemeral:
             volumeClaimTemplate:
               spec:
-                storageClassName: "linode-block-storage"
                 accessModes: [ "ReadWriteOnce" ]
                 resources:
                   requests:
