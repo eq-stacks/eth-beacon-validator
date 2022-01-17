@@ -46,14 +46,6 @@ spec:
             "--metrics-address=0.0.0.0",
             "--metrics-port=8008"
           ]
-          livenessProbe:
-            httpGet:
-              host: 0.0.0.0
-              port: 8008
-          readinessProbe:
-            httpGet:
-              host: goerli-geth.validators.svc.cluster.local
-              port: 8546
           image: statusim/nimbus-eth2:amd64-latest
           ports:
             - containerPort: 30900
