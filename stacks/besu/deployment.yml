@@ -42,7 +42,7 @@ spec:
         command:
           - "besu"
           - "--network=goerli"
-          - "--logging=DEBUG"
+          - "--logging=INFO"
           - "--rpc-ws-enabled"
           - "--rpc-ws-port=8546"
           - "--metrics-enabled"
