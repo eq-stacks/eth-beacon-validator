@@ -28,11 +28,12 @@ spec:
       containers:
         - name: prater-nimbus
           resources:
-              requests:
-                cpu: "2"
-              limits:
-                memory: "2Gi"
-                cpu: "2"
+            requests:
+              memory: 4Gi
+              cpu: 3000m
+            limits:
+              memory: 8Gi
+              cpu: 16000m
           args: [
             "--network=prater",
             "--tcp-port=30900",
@@ -45,6 +46,14 @@ spec:
             "--metrics-address=0.0.0.0",
             "--metrics-port=8008"
           ]
+          livenessProbe:
+            httpGet:
+              host: 0.0.0.0
+              port: 8008
+          readinessProbe:
+            httpGet:
+              host: goerli-geth.validators.svc.cluster.local
+              port: 8546
           image: statusim/nimbus-eth2:amd64-latest
           ports:
             - containerPort: 30900
