@@ -44,6 +44,7 @@ spec:
           - "--network=goerli"
           - "--logging=INFO"
           - "--rpc-ws-enabled"
+          - "--rpc-ws-host=0.0.0.0"
           - "--rpc-ws-port=8546"
           - "--metrics-enabled"
           - "--metrics-host=0.0.0.0"

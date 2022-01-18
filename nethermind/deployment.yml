@@ -31,6 +31,7 @@ spec:
             "--Network.DiscoveryPort=30305",
             "--Network.P2PPort=30305",
             "--Init.WebSocketsEnabled=true",
+            "--JsonRpc.Host=0.0.0.0",
             "--JsonRpc.WebSocketsPort=8546"
           ]
           image: nethermind/nethermind:1.12.4

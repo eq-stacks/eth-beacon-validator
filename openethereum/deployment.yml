@@ -39,6 +39,7 @@ spec:
             "--chain=goerli",
             "--metrics",
             "--port=30305",
+            "--ws-interface=0.0.0.0",
             "--ws-port=8546"
           ]
           image: openethereum/openethereum:v3.3.3
