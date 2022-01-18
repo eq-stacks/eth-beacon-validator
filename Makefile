@@ -1,6 +1,7 @@
-build:
+build: prometheus
 	kubectl create namespace validators
 	kubectl apply -f geth -f besu -f nethermind -f openethereum
+	kubectl apply -f metrics/ingress.yml
 
 logs:
 	kubectl -n validators logs goerli-geth-0
@@ -8,14 +9,7 @@ logs:
 prometheus:
 	helm install prometheus prometheus-community/kube-prometheus-stack
 
-firewall-gcloud:
-	gcloud compute firewall-rules create grafanatcp --allow tcp:30080
-	gcloud compute firewall-rules create rlpx1tcp --allow tcp:30303
-	gcloud compute firewall-rules create rlpx1udp --allow udp:30303
-	gcloud compute firewall-rules create rlpx2tcp --allow tcp:30304
-	gcloud compute firewall-rules create rlpx2udp --allow udp:30304
-	gcloud compute firewall-rules create rlpx3tcp --allow tcp:30305
-	gcloud compute firewall-rules create rlpx3udp --allow udp:30305
+clean: prometheus-install
 
 prometheus-uninstall:
 	helm uninstall prometheus
