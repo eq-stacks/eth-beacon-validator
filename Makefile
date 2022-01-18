@@ -1,6 +1,6 @@
 build:
 	kubectl create namespace validators
-	kubectl apply -f geth -f besu -f nethermind
+	kubectl apply -f geth -f besu -f nethermind -f openethereum
 
 logs:
 	kubectl -n validators logs goerli-geth-0
