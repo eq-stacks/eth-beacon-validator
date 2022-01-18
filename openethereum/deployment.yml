@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: goerli-openethereum
+  namespace: validators
+spec:
+  selector:
+    matchLabels:
+      app: goerli-openethereum
+  revisionHistoryLimit: 0
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: goerli-openethereum
+    spec:
+      initContainers:
+        - name: chown
+          image: busybox
+          command:
+            - chown
+            - -R
+            - "1000:1000"
+            - /openethereum/data
+          volumeMounts:
+            - mountPath: /openethereum/data
+              name: goerli-openethereum-data
+      containers:
+        - name: goerli-openethereum
+          resources:
+            requests:
+              memory: 4Gi
+              cpu: 3000m
+            limits:
+              memory: 8Gi
+              cpu: 16000m
+          args: [
+            "--base-path=/openethereum/data",
+            "--chain=goerli",
+            "--metrics",
+            "--port=30305",
+            "--ws-port=8546"
+          ]
+          image: openethereum/openethereum:v3.3.3
+          ports:
+            - containerPort: 30306
+            - containerPort: 3000
+            - containerPort: 8546
+          volumeMounts:
+            - mountPath: /openethereum/data
+              name: goerli-openethereum-data
+      restartPolicy: Always
+      volumes:
+        - name: goerli-openethereum-data
+          ephemeral:
+            volumeClaimTemplate:
+              spec:
+                accessModes: [ "ReadWriteOnce" ]
+                resources:
+                  requests:
+                    storage: 50Gi
