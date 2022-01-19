@@ -3,13 +3,10 @@ build: prometheus
 	kubectl apply -f geth -f besu -f nethermind -f openethereum
 	kubectl apply -f metrics/ingress.yml
 
-logs:
-	kubectl -n validators logs goerli-geth-0
+clean: prometheus-uninstall
 
 prometheus:
-	helm install prometheus prometheus-community/kube-prometheus-stack
-
-clean: prometheus-install
+	helm install --namespace default prometheus prometheus-community/kube-prometheus-stack
 
 prometheus-uninstall:
 	helm uninstall prometheus
@@ -22,17 +19,4 @@ prometheus-uninstall:
 	kubectl delete crd servicemonitors.monitoring.coreos.com
 	kubectl delete crd thanosrulers.monitoring.coreos.com
 
-geth:
-	kubectl -n validators exec -ti goerli-geth-0 -- /bin/sh # geth attach --datadir=/root/.ethereum/goerli
-
-nimbus:
-	kubectl -n validators exec -ti prater-nimbus-0 -- /bin/bash
-
-init:
-	minikube -p eth-beacon-chain addons enable ingress
-
-restart:
-	kubectl -n validators rollout restart sts goerli-geth
-
-getall:
-	kubectl -n validators get all
+.PHONY: build clean prometheus prometheus-uninstall
