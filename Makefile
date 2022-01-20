@@ -19,4 +19,8 @@ prometheus-uninstall:
 	kubectl delete crd servicemonitors.monitoring.coreos.com
 	kubectl delete crd thanosrulers.monitoring.coreos.com
 
+dbench:
+	# edit storage class name first!
+	kubectl apply -f benchmarks/dbench.yml
+
 .PHONY: build clean prometheus prometheus-uninstall
