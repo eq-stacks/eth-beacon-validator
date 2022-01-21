@@ -8,10 +8,10 @@ init:
 	kubectl patch storageclass premium-rwo -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
 	kubectl apply -f ./snapshots/volumesnapshotclass.yml
 	helm install --namespace observability prometheus prometheus-community/kube-prometheus-stack
-	kubectl apply -f metrics/ingress.yml
+	kubectl apply -f observability/ingress.yml
 
 clean: confirm
-	kubectl delete -f metrics/ingress.yml
+	kubectl delete -f observability/ingress.yml
 	helm --namespace observability uninstall prometheus
 	kubectl delete crd alertmanagerconfigs.monitoring.coreos.com
 	kubectl delete crd alertmanagers.monitoring.coreos.com
