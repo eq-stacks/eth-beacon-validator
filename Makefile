@@ -28,4 +28,7 @@ knb:
 	./knb/knb --verbose --client-node `kubectl get nodes --no-headers -o=custom-columns=":metadata.name" | head -1` --server-node `kubectl get nodes --no-headers -o=custom-columns=":metadata.name" | head -2 | tail -1`
 	rm -rf knb
 
+volumesnapshotclass:
+	kubectl apply -f ./scripts/volumesnapshotclass.yml
+
 .PHONY: build clean prometheus prometheus-uninstall dbench
