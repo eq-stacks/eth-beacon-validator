@@ -1,0 +1,8 @@
+apiVersion: snapshot.storage.k8s.io/v1
+kind: VolumeSnapshot
+metadata:
+  name: ${SNAPSHOT_NAME}-snapshot-${SNAPSHOT_TIME}
+spec:
+  volumeSnapshotClassName: gke-snapshotclass
+  source:
+    persistentVolumeClaimName: ${PVC_NAME}
