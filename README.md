@@ -1,17 +1,19 @@
 # IaC: Eth Beacon Chain Validator
-> Infrastrucutre-as-Code for running an Ethereum 2.0 Beacon Chain Validator
+> Infrastructure-as-Code for running an Ethereum 2.0 Beacon Chain Validator
+
+Note that while we avoid it when we can, these configurations favor Google Cloud Platform,
+where we deploy our production validators.
 
 ## Install
 
 ### Prerequisites
 
 - One or more machines that can run [Kubernetes] (or [minikube] locally)
-- Roughly 1 TB of SSD storage for chain data
-- Ports 30303 and 9000 open
-- (Optional) Static IP address
+- The [gcloud] command line tool (and a working login)
 
 [Kubernetes]: https://kubernetes.io/docs/tasks/tools/
 [minikube]: https://minikube.sigs.k8s.io/docs/start/
+[gcloud]: https://cloud.google.com/sdk/gcloud
 
 ### Local installation
 
