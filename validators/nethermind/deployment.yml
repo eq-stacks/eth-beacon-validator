@@ -48,6 +48,10 @@ spec:
           ephemeral:
             volumeClaimTemplate:
               spec:
+                dataSource:
+                  name: goerli-nethermind-data-snapshot-latest
+                  kind: VolumeSnapshot
+                  apiGroup: snapshot.storage.k8s.io
                 accessModes: [ "ReadWriteOnce" ]
                 resources:
                   requests:
