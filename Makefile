@@ -1,14 +1,16 @@
 build: prometheus
-	kubectl create namespace validators
 	kubectl apply -f geth -f besu -f nethermind -f openethereum
+
+init:
+	kubectl create namespace validators
+	kubectl patch storageclass standard -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
+	kubectl patch storageclass premium-rwo -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+	kubectl apply -f ./scripts/volumesnapshotclass.yml
+	helm install --namespace default prometheus prometheus-community/kube-prometheus-stack
 	kubectl apply -f metrics/ingress.yml
 
-clean: prometheus-uninstall
-
-prometheus:
-	helm install --namespace default prometheus prometheus-community/kube-prometheus-stack
-
-prometheus-uninstall:
+clean: confirm
+	kubectl delete -f metrics/ingress.yml
 	helm uninstall prometheus
 	kubectl delete crd alertmanagerconfigs.monitoring.coreos.com
 	kubectl delete crd alertmanagers.monitoring.coreos.com
@@ -18,17 +20,13 @@ prometheus-uninstall:
 	kubectl delete crd prometheusrules.monitoring.coreos.com
 	kubectl delete crd servicemonitors.monitoring.coreos.com
 	kubectl delete crd thanosrulers.monitoring.coreos.com
+	kubectl delete -f ./scripts/volumesnapshotclass.yml
+	kubectl patch storageclass premium-rwo -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
+	kubectl patch storageclass standard -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+	kubectl delete namespace validators
 
-dbench:
-	# edit storage class name first!
-	kubectl apply -f benchmarks/dbench.yml
+confirm:
+	echo "This will delete everything. There is no undo. Giving you 3 seconds to reconsider..."
+	sleep 3 
 
-knb:
-	git clone https://github.com/InfraBuilder/k8s-bench-suite knb
-	./knb/knb --verbose --client-node `kubectl get nodes --no-headers -o=custom-columns=":metadata.name" | head -1` --server-node `kubectl get nodes --no-headers -o=custom-columns=":metadata.name" | head -2 | tail -1`
-	rm -rf knb
-
-volumesnapshotclass:
-	kubectl apply -f ./scripts/volumesnapshotclass.yml
-
-.PHONY: build clean prometheus prometheus-uninstall dbench
+.PHONY: build init clean confirm

@@ -8,25 +8,31 @@ where we deploy our production validators.
 
 ### Prerequisites
 
-- One or more machines that can run [Kubernetes] (or [minikube] locally)
-- The [gcloud] command line tool (and a working login)
+You will need `kubectl` access to a k8s cluster. The configuration and idioms are geared towards
+Google Cloud Engine, but they should be fairly interoperable with other providers or local development
+e.g. [`minikube`]
 
-[Kubernetes]: https://kubernetes.io/docs/tasks/tools/
-[minikube]: https://minikube.sigs.k8s.io/docs/start/
-[gcloud]: https://cloud.google.com/sdk/gcloud
+[`kubectl`]: https://kubernetes.io/docs/tasks/tools/
+[`minikube`]: https://minikube.sigs.k8s.io/docs/start/
 
-### Local installation
+### Initializiation (first time only)
 
-Once the prerequisites are in place, simply run `make` to start the minikube cluster and apply the
-configuration for geth and nimbus.
+Once you have your cluster ready, run this command to perform a one-time setup:
 
 ```
-make
+make init
 ```
 
-### Environment setup
+This command performs the following tasks:
 
-If you're setting up a new cluster, you'll need to:
+1. Creates the `validators` namespace
+2. Sets `premium-rwo` to the default storage class
+3. Creates the `gke-snapshotclass` VolumeSnapshotClass
+4. Installs the Prometheus Operator
+5. Creates Ingresses for the Prometheus and Grafana UIs
 
-1. Set default storage class
-2.Create volume snapshots
+### Running a validator
+
+```
+kubectl apply -f geth -f nimbus
+```
