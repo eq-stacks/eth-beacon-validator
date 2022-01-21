@@ -3,15 +3,16 @@ build: prometheus
 
 init:
 	kubectl create namespace validators
+	kubectl create namespace observability
 	kubectl patch storageclass standard -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
 	kubectl patch storageclass premium-rwo -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
-	kubectl apply -f ./scripts/volumesnapshotclass.yml
-	helm install --namespace default prometheus prometheus-community/kube-prometheus-stack
+	kubectl apply -f ./snapshots/volumesnapshotclass.yml
+	helm install --namespace observability prometheus prometheus-community/kube-prometheus-stack
 	kubectl apply -f metrics/ingress.yml
 
 clean: confirm
 	kubectl delete -f metrics/ingress.yml
-	helm uninstall prometheus
+	helm --namespace observability uninstall prometheus
 	kubectl delete crd alertmanagerconfigs.monitoring.coreos.com
 	kubectl delete crd alertmanagers.monitoring.coreos.com
 	kubectl delete crd podmonitors.monitoring.coreos.com
@@ -20,9 +21,10 @@ clean: confirm
 	kubectl delete crd prometheusrules.monitoring.coreos.com
 	kubectl delete crd servicemonitors.monitoring.coreos.com
 	kubectl delete crd thanosrulers.monitoring.coreos.com
-	kubectl delete -f ./scripts/volumesnapshotclass.yml
+	kubectl delete -f ./snapshots/volumesnapshotclass.yml
 	kubectl patch storageclass premium-rwo -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
 	kubectl patch storageclass standard -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+	kubectl delete namespace observability
 	kubectl delete namespace validators
 
 confirm:
