@@ -20,6 +20,7 @@ In this document we will catalog all decisions made regarding the architecture d
     - [Ethereum Clients](#ethereum-clients)
     - [Eth2 Clients](#eth2-clients)
   - [Decision Log](#decision-log)
+    - [_2022.01.22_ - Google Cloud](#20220122---google-cloud)
     - [_2022.01.11_ - Don't submit the deposit before your validator is fully synced.](#20220111---dont-submit-the-deposit-before-your-validator-is-fully-synced)
     - [_2022.01.10_ - The Prater Testnet](#20220110---the-prater-testnet)
     - [_2022.01.09_ - Drive Locality](#20220109---drive-locality)
@@ -105,6 +106,14 @@ Status: Currently evaluating the Ethereum Foundation's [list of suggested Eth2 c
 https://ethereum.org/en/developers/docs/nodes-and-clients/#clients
 
 ## Decision Log
+
+### _2022.01.22_ - Google Cloud
+
+After benchmarking both [network] and [disk] IO, it was determined that Google Cloud engine was the most cost-effective
+solution.
+
+[network]: https://www.notion.so/Network-I-O-9499b80dd9ec4d928d91fd3dc971a4f9
+[disk]: https://www.notion.so/Disk-I-O-dab9776f66c04aa4b0f46f13c8b58ecf
 
 ### _2022.01.11_ - Don't submit the deposit before your validator is fully synced.
 
