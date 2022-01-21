@@ -23,4 +23,9 @@ dbench:
 	# edit storage class name first!
 	kubectl apply -f benchmarks/dbench.yml
 
-.PHONY: build clean prometheus prometheus-uninstall
+knb:
+	git clone https://github.com/InfraBuilder/k8s-bench-suite knb
+	./knb/knb --verbose --client-node `kubectl get nodes --no-headers -o=custom-columns=":metadata.name" | head -1` --server-node `kubectl get nodes --no-headers -o=custom-columns=":metadata.name" | head -2 | tail -1`
+	rm -rf knb
+
+.PHONY: build clean prometheus prometheus-uninstall dbench
