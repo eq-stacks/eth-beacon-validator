@@ -21,3 +21,10 @@ configuration for geth and nimbus.
 ```
 make
 ```
+
+### Environment setup
+
+If you're setting up a new cluster, you'll need to:
+
+1. Set default storage class
+2.Create volume snapshots
