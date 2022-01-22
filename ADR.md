@@ -20,6 +20,7 @@ In this document we will catalog all decisions made regarding the architecture d
     - [Ethereum Clients](#ethereum-clients)
     - [Eth2 Clients](#eth2-clients)
   - [Decision Log](#decision-log)
+    - [_2022.01.22_ - Ephemeral Storage + Google Cloud Volume Snapshots](#20220122---ephemeral-storage--google-cloud-volume-snapshots)
     - [_2022.01.22_ - Google Cloud](#20220122---google-cloud)
     - [_2022.01.11_ - Don't submit the deposit before your validator is fully synced.](#20220111---dont-submit-the-deposit-before-your-validator-is-fully-synced)
     - [_2022.01.10_ - The Prater Testnet](#20220110---the-prater-testnet)
@@ -106,6 +107,30 @@ Status: Currently evaluating the Ethereum Foundation's [list of suggested Eth2 c
 https://ethereum.org/en/developers/docs/nodes-and-clients/#clients
 
 ## Decision Log
+
+### _2022.01.22_ - Ephemeral Storage + Google Cloud Volume Snapshots
+
+Since the blockchain data is stateful but *not* user-oriented, we don't need to use `StatefulSets` here, nor explicit
+`PersistentVolumeClaims`. Instead we can use `ephemeral` volumes described in the pod spec, and periodic `VolumeSnapshots`
+can be made to reduce syncing time and resource utilization.
+
+Caveats:
+1. The `VolumeSnapshot`s must be manually created one time during startup.
+2. RBAC or similar will need to be configured so that we can call the K8S API during a `CronJob`.
+3. This disqualified Linode as a cloud provider :(
+
+Also, note that volume snapshots report in GKE as "Ready to Use" even though they're totally not. It really takes
+about 15m until they're ready.
+
+```
+Status:
+  ...
+  Ready To Use:                        true
+Events:
+  Type    Reason            Age    From                 Message
+  ----    ------            ----   ----                 -------
+  Normal  CreatingSnapshot  6m10s  snapshot-controller  Waiting for a snapshot validators/goerli-openethereum-data-snapshot-latest to be created by the CSI driver.
+```
 
 ### _2022.01.22_ - Google Cloud
 
