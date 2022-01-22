@@ -1,5 +1,5 @@
-build: prometheus
-	kubectl apply -f geth -f besu -f nethermind -f openethereum
+build:
+	kubectl apply -f validators/geth -f validators/nethermind -f validators/openethereum
 
 init:
 	kubectl create namespace validators
