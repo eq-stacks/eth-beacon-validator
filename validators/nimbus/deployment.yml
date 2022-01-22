@@ -7,7 +7,7 @@ spec:
   selector:
     matchLabels:
       app: prater-nimbus
-  replicas: 2
+  replicas: 1
   revisionHistoryLimit: 0
   template:
     metadata:
