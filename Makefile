@@ -31,4 +31,7 @@ confirm:
 	echo "This will delete everything. There is no undo. Giving you 3 seconds to reconsider..."
 	sleep 3 
 
-.PHONY: build init clean confirm
+snapshots:
+	./snapshots/create-volume-snapshots.sh
+
+.PHONY: build init clean confirm snapshots
