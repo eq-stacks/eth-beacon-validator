@@ -1,5 +1,5 @@
 build:
-	kubectl apply -f validators/geth -f validators/nethermind -f validators/openethereum
+	kubectl apply -f validators/geth -f validators/erigon
 
 init:
 	kubectl create namespace validators
