@@ -6,19 +6,13 @@ In this document we will catalog all decisions made regarding the architecture d
 1. Validation is a highly competitive practice. The higher you are on the leaderboard the better
 2. In general, your validator ranking depends on *high availability* and *low latency*
 3. Low Latency = High network throughput, high disk speed
-4. The best technology is the least technology
-5. Prefer FOSS over proprietary software
+4. Container native: should be as portable _as possible_ while still utilizing the advantages of the speicific cloud provider we're using.
 
 - [Architectural Decision Record](#architectural-decision-record)
   - [Foundational Decisions](#foundational-decisions)
     - [Operating System: Linux](#operating-system-linux)
     - [Linux Distribution: Container-Optimized OS from Google](#linux-distribution-container-optimized-os-from-google)
-    - [Local Development & Testing](#local-development--testing)
-    - [Infrastructure Management](#infrastructure-management)
-    - [Application Management](#application-management)
-    - [Security](#security)
-    - [Ethereum Clients](#ethereum-clients)
-    - [Eth2 Clients](#eth2-clients)
+  - [Stack Overview](#stack-overview)
   - [Decision Log](#decision-log)
     - [_2022.01.22_ - Ephemeral Storage + Google Cloud Volume Snapshots](#20220122---ephemeral-storage--google-cloud-volume-snapshots)
     - [_2022.01.22_ - Google Cloud](#20220122---google-cloud)
@@ -46,62 +40,18 @@ underlying node pool OS. However, COS is [security-hardened] for containers, and
 [Chromium OS]: https://www.chromium.org/chromium-os
 [security-hardened]: https://cloud.google.com/container-optimized-os/docs/concepts/security
 
-### Local Development & Testing
+## Stack Overview
 
 | Function | Chosen Tech | Rationale | Alternatives |
 | -------- | ----------- | --------- | ------------ |
-| Hypervisor (Linux) | KVM | TBD | |
-| Hypervisor (Mac) | HVF | TBD | UTM |
-| Virtualization | QEMU | TBD | VirtualBox |
-
-### Infrastructure Management
-
-| Function | Chosen Tech | Rationale | Alternatives |
-| -------- | ----------- | --------- | ------------ |
-| IT Automation | Terraform | TBD | Bash scripts, Vendor-specific e.g. CloudFormation  |
-
-Open questions:
-1. Are Terraform / Ansible both necessary? It would be great if neither were.
-2. Can we get away with something much simpler? Probably not for Cloud management, and better to use these than some vendor-locked-in solution.
-
-### Application Management
-
-Containerization vs Non-containerization discussion
-
-| Function | Chosen Tech | Rationale | Alternatives |
-| -------- | ----------- | --------- | ------------ |
-| Container runtime | Docker | [Soon to be CRI] | Podman, Systemd services |
-| Container Orchestration | Kubernetes| Cloud Provider support, eventual push-button deployments | Docker Swarm |
-| Configuration | TBD | Env vars, docker-compose.yaml, templated files, docker configs |
-
-[Soon to be CRI]: https://kubernetes.io/blog/2020/12/02/dont-panic-kubernetes-and-docker/
-
-### Security
-
-| Function | Chosen Tech | Rationale | Alternatives |
-| -------- | ----------- | --------- | ------------ |
+| Local Development / Testing | Minikube or GCP Dev Cluster | Minikube might not be performant enough for local | |
+| IT Automation | Terraform (tentative) | TBD | Bash scripts, Vendor-specific e.g. CloudFormation  |
+| Container runtime | containerd | Imported from Container-Optimized OS | Podman, Systemd services |
+| Container Orchestration | Kubernetes | Cloud Provider support, eventual push-button deployments | Docker Swarm |
+| Configuration | Kubernetes ConfigMaps & Secrets | | Env vars, docker-compose.yaml, templated files, docker configs |
 | Key Management | TBD | TBD | |
-
-### Ethereum Clients
-
-Status: Currently evaluating the Ethereum Foundation's [list of suggested Eth1 clients](https://launchpad.ethereum.org/en/select-client):
-1. Nethermind
-2. Geth - imports InfluxDB
-3. Besu
-4. Erigon
-
-Note: OpenEthereum has been [deprecated](https://medium.com/openethereum/gnosis-joins-erigon-formerly-turbo-geth-to-release-next-gen-ethereum-client-c6708dd06dd).
-
-### Eth2 Clients
-
-Status: Currently evaluating the Ethereum Foundation's [list of suggested Eth2 clients](https://launchpad.ethereum.org/en/select-client):
-
-1. Prysm
-2. Nimbus
-3. Teku
-4. Lighthouse
-
-https://ethereum.org/en/developers/docs/nodes-and-clients/#clients
+| Eth1 Client | go-ethereum or erigon | Still evaluating... | Nethermind, Besu |
+| Eth2 Client | Prysm, Nimbus, Teku, Lighthouse | Still evailating | |
 
 ## Decision Log
 
