@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: beaconchain-prometheus-exporter
+  namespace: observability
+data:
+  validator_index: "271938"
+  root_url: "https://prater.beaconcha.in"

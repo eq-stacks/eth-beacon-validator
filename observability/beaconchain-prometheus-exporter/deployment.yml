@@ -28,7 +28,13 @@ spec:
             - containerPort: 9184
           env:
             - name: VALIDATOR_INDEX
-              value: "271938"
+              valueFrom:
+                configMapKeyRef:
+                  name: beaconchain-prometheus-exporter
+                  key: validator_index
             - name: ROOT_URL
-              value: "https://prater.beaconcha.in"
+              valueFrom:
+                configMapKeyRef:
+                  name: beaconchain-prometheus-exporter
+                  key: root_url
       restartPolicy: Always
