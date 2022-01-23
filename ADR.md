@@ -12,7 +12,7 @@ In this document we will catalog all decisions made regarding the architecture d
 - [Architectural Decision Record](#architectural-decision-record)
   - [Foundational Decisions](#foundational-decisions)
     - [Operating System: Linux](#operating-system-linux)
-    - [Linux Distribution: Debian Based, Ubuntu Server preferred](#linux-distribution-debian-based-ubuntu-server-preferred)
+    - [Linux Distribution: Container-Optimized OS from Google](#linux-distribution-container-optimized-os-from-google)
     - [Local Development & Testing](#local-development--testing)
     - [Infrastructure Management](#infrastructure-management)
     - [Application Management](#application-management)
@@ -35,17 +35,16 @@ Almost a no-brainer. [Linux](https://www.linux.org/) is chosen over other system
 
 We don't lose much of anything by using Linux - there may be other esoteric and specialized *nix based that manifest in the future, but those should be evaluated carefully, on a case-by-case basis. 
 
-### Linux Distribution: Debian Based, Ubuntu Server preferred
+### Linux Distribution: Container-Optimized OS from Google
 
-The described infrastructure targets [Debian Stable](https://www.debian.org/releases/stable/) instead of "derivative" distributions like Ubuntu Server due to its:
-- Exceedingly stable LTS, plus 1 additional year of support
-- Lightweight footprint, in terms of resource utilization
-- Lack of proprietary software in the default package repositories
+We are more or less vendor-locked to Container-Optimized OS (COS) due to our use of Google Kubernetes Engine.
 
-Default OS-level conventions should be honored, such as `systemd`, `apt`, etc.  
+[Container-Optimized OS] is based on the [Chromium OS]. Alternatively Google Cloud offers Ubuntu for the
+underlying node pool OS. However, COS is [security-hardened] for containers, and is more lightweight than Ubuntu.
 
-TODOs:
-- Compare to Alpine / Rancher / NixOS?
+[Container-Optimized OS]: https://cloud.google.com/container-optimized-os/docs
+[Chromium OS]: https://www.chromium.org/chromium-os
+[security-hardened]: https://cloud.google.com/container-optimized-os/docs/concepts/security
 
 ### Local Development & Testing
 
@@ -60,8 +59,6 @@ TODOs:
 | Function | Chosen Tech | Rationale | Alternatives |
 | -------- | ----------- | --------- | ------------ |
 | IT Automation | Terraform | TBD | Bash scripts, Vendor-specific e.g. CloudFormation  |
-| Provisioning | Ansible | TBD | Bash scripts, Vagrant, pyinfra |
-| Internal Networking | Wireguard | TBD | OpenVPN, Cloud-specific solutions e.g. Amazon VPC |
 
 Open questions:
 1. Are Terraform / Ansible both necessary? It would be great if neither were.
