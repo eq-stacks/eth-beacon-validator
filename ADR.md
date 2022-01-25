@@ -67,7 +67,7 @@ Caveats:
 3. This disqualified Linode as a cloud provider :(
 
 Also, note that volume snapshots report in GKE as "Ready to Use" even though they're totally not. It really takes
-about 15m until they're ready.
+about 1 hour until they're ready.
 
 ```
 Status:
