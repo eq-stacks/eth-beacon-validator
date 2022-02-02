@@ -3,3 +3,9 @@ inventory
 validator_keys
 mnemonic
 knb
+
+# Terraform stuff
+.terraform
+service-account-key.json 
+terraform.tfstate*
+terraform.tfvars
