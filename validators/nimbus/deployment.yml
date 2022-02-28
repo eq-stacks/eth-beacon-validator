@@ -1,3 +1,4 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -59,7 +60,7 @@ spec:
           ephemeral:
             volumeClaimTemplate:
               spec:
-                accessModes: [ "ReadWriteOnce" ]
+                accessModes: ["ReadWriteOnce"]
                 resources:
                   requests:
                     storage: 50Gi

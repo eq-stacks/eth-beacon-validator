@@ -1,3 +1,4 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -36,10 +37,10 @@ spec:
           image: ethereum/client-go:v1.10.15
           livenessProbe:
             exec:
-              command: 
+              command:
                 - wget
                 - --no-cache
-                - -S 
+                - -S
                 - -O-
                 - "0.0.0.0:6060/debug/metrics/prometheus"
             failureThreshold: 5
@@ -63,7 +64,7 @@ spec:
                   name: goerli-geth-data-snapshot-latest
                   kind: VolumeSnapshot
                   apiGroup: snapshot.storage.k8s.io
-                accessModes: [ "ReadWriteOnce" ]
+                accessModes: ["ReadWriteOnce"]
                 resources:
                   requests:
                     storage: 50Gi

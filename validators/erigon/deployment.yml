@@ -1,3 +1,4 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -57,7 +58,7 @@ spec:
                 #   name: goerli-erigon-data-snapshot-latest
                 #   kind: VolumeSnapshot
                 #   apiGroup: snapshot.storage.k8s.io
-                accessModes: [ "ReadWriteOnce" ]
+                accessModes: ["ReadWriteOnce"]
                 resources:
                   requests:
                     storage: 200Gi

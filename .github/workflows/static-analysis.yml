@@ -1,6 +1,7 @@
+---
 name: Static Analysis
 
-on:
+on:  # yamllint disable-line rule:truthy
   push:
     branches:
       - main
@@ -25,7 +26,7 @@ jobs:
           terraform init
           terraform validate
         working-directory: infrastructure
-      
+
       - uses: actions/cache@v2
         name: Cache plugin dir
         with:
@@ -62,4 +63,3 @@ jobs:
           # config: .kube-linter/config.yaml
           # format: sarif
           # output-file: kube-linter.sarif
-
