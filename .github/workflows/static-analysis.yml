@@ -18,13 +18,13 @@ jobs:
 
       - name: terraform fmt -check -diff
         run: terraform fmt -check -diff
-        working-directory: infra
+        working-directory: infrastructure
 
       - name: terraform validate
         run: |
           terraform init
           terraform validate
-        working-directory: infra
+        working-directory: infrastructure
       
       - uses: actions/cache@v2
         name: Cache plugin dir
@@ -39,11 +39,11 @@ jobs:
 
       - name: Init TFLint
         run: tflint --init
-        working-directory: infra
+        working-directory: infrastructure
 
       - name: Run TFLint
         run: tflint -f compact
-        working-directory: infra
+        working-directory: infrastructure
 
   kubernetes:
     runs-on: ubuntu-latest
