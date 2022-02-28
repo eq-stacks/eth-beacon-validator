@@ -1,0 +1,65 @@
+name: Static Analysis
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - "*"
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v2
+
+      - name: terraform fmt -check -diff
+        run: terraform fmt -check -diff
+        working-directory: infra
+
+      - name: terraform validate
+        run: |
+          terraform init
+          terraform validate
+        working-directory: infra
+      
+      - uses: actions/cache@v2
+        name: Cache plugin dir
+        with:
+          path: ~/.tflint.d/plugins
+          key: ${{ matrix.os }}-tflint-${{ hashFiles('.tflint.hcl') }}
+
+      - uses: terraform-linters/setup-tflint@v1
+        name: Setup TFLint
+        with:
+          tflint_version: v0.29.0
+
+      - name: Init TFLint
+        run: tflint --init
+        working-directory: infra
+
+      - name: Run TFLint
+        run: tflint -f compact
+        working-directory: infra
+
+  kubernetes:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v2
+
+      - name: YAML Lint
+        run: yamllint ./deployment
+
+      - name: Scan repo with kube-linter
+        uses: stackrox/kube-linter-action@v1.0.4
+        with:
+          directory: deployment
+          # config: .kube-linter/config.yaml
+          # format: sarif
+          # output-file: kube-linter.sarif
+
