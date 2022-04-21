@@ -18,11 +18,6 @@ variable "credentials_file" {
   type        = string
 }
 
-variable "credentials_file" {
-  description = "GCP Credentials File"
-  type        = string
-}
-
 variable "location" {
   description = "GCP Zone location for kubernetes cluster"
   type        = string
