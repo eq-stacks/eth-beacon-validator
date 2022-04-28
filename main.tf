@@ -4,6 +4,10 @@ terraform {
       source  = "hashicorp/kubernetes"
       version = ">= 2.9"
     }
+    kubectl = {
+      source  = "gavinbunney/kubectl"
+      version = ">= 1.7.0"
+    }
     google = {
       source  = "hashicorp/google"
       version = ">= 4.15"
@@ -27,31 +31,34 @@ data "google_client_config" "default" {
   depends_on = [module.infrastructure]
 }
 
-# Defer reading the cluster data until the GKE cluster exists.
-data "google_container_cluster" "default" {
-  name       = var.cluster_name
-  depends_on = [module.infrastructure]
-}
-
 data "google_service_account" "terraform" {
   account_id = "terraform"
   project    = var.service_account_project
 }
 
 provider "kubernetes" {
-  host  = "https://${data.google_container_cluster.default.endpoint}"
+  host  = "https://${module.infrastructure.k8s_endpoint}"
   token = data.google_client_config.default.access_token
   cluster_ca_certificate = base64decode(
-    data.google_container_cluster.default.master_auth[0].cluster_ca_certificate,
+    module.infrastructure.k8s_cluster_ca_certificate
   )
+}
+
+provider "kubectl" {
+  host  = "https://${module.infrastructure.k8s_endpoint}"
+  token = data.google_client_config.default.access_token
+  cluster_ca_certificate = base64decode(
+    module.infrastructure.k8s_cluster_ca_certificate
+  )
+  load_config_file = false
 }
 
 provider "helm" {
   kubernetes {
-    host  = "https://${data.google_container_cluster.default.endpoint}"
+    host  = "https://${module.infrastructure.k8s_endpoint}"
     token = data.google_client_config.default.access_token
     cluster_ca_certificate = base64decode(
-      data.google_container_cluster.default.master_auth[0].cluster_ca_certificate,
+      module.infrastructure.k8s_cluster_ca_certificate
     )
   }
 }

@@ -16,26 +16,50 @@ terraform {
   }
 }
 
-resource "kubernetes_storage_class" "standard" {
-  metadata {
-    name = "standard"
-    annotations = {
-      "storageclass.kubernetes.io/is-default-class" = "false"
-    }
-  }
+resource "kubectl_manifest" "standard-storageclass" {
+  yaml_body = <<YAML
+allowVolumeExpansion: true
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "false"
+  labels:
+    addonmanager.kubernetes.io/mode: EnsureExists
+  name: standard
+parameters:
+  type: pd-standard
+provisioner: kubernetes.io/gce-pd
+reclaimPolicy: Delete
+volumeBindingMode: Immediate
+YAML
 
-  storage_provisioner = "kubernetes.io/gce-pd"
+  apply_only = true
 }
 
-resource "kubernetes_storage_class" "premium-rwo" {
-  metadata {
-    name = "premium-rwo"
-    annotations = {
-      "storageclass.kubernetes.io/is-default-class" = "true"
-    }
-  }
+resource "kubectl_manifest" "premium-rwo-storageclass" {
+  yaml_body = <<YAML
+allowVolumeExpansion: true
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  annotations:
+    components.gke.io/component-name: pdcsi
+    components.gke.io/component-version: 0.10.8
+    components.gke.io/layer: addon
+    storageclass.kubernetes.io/is-default-class: "true"
+  labels:
+    addonmanager.kubernetes.io/mode: EnsureExists
+    k8s-app: gcp-compute-persistent-disk-csi-driver
+  name: premium-rwo
+parameters:
+  type: pd-ssd
+provisioner: pd.csi.storage.gke.io
+reclaimPolicy: Delete
+volumeBindingMode: WaitForFirstConsumer
+YAML
 
-  storage_provisioner = "kubernetes.io/gce-pd"
+  apply_only = true
 }
 
 resource "kubectl_manifest" "gke-snapshotclass" {
@@ -47,4 +71,9 @@ metadata:
 driver: pd.csi.storage.gke.io
 deletionPolicy: Delete
 YAML
+
+  depends_on = [
+    kubectl_manifest.standard-storageclass,
+    kubectl_manifest.premium-rwo-storageclass,
+  ]
 }
