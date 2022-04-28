@@ -77,3 +77,19 @@ YAML
     kubectl_manifest.premium-rwo-storageclass,
   ]
 }
+
+resource "kubernetes_cluster_role_binding" "cluster-admin" {
+  metadata {
+    name = "terraform-sa-cluster-admin"
+  }
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "ClusterRole"
+    name      = "cluster-admin"
+  }
+  subject {
+    kind      = "User"
+    name      = "terraform@service-accounts-340001.iam.gserviceaccount.com"
+    api_group = "rbac.authorization.k8s.io"
+  }
+}

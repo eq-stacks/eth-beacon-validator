@@ -17,7 +17,7 @@ resource "helm_release" "prometheus" {
 
 resource "helm_release" "beaconchain-prometheus-exporter" {
   name      = "beaconchain-prometheus-exporter"
-  chart     = "../charts/beaconchain-prometheus-exporter"
+  chart     = "${path.root}/charts/beaconchain-prometheus-exporter"
   namespace = "observability"
 
   depends_on = [
