@@ -8,6 +8,11 @@ resource "helm_release" "geth" {
   chart     = "${path.root}/charts/geth"
   namespace = "validators"
 
+  set {
+    name = "geth.data.from.snapshot"
+    value = tostring(var.bootstrap_geth_data_from_snapshot)
+  }
+
   depends_on = [
     kubernetes_namespace.validators,
   ]

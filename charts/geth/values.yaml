@@ -1,2 +1,6 @@
 # Default values for geth.
 # TODO: Add variables when refactoring templates.
+geth:
+  data:
+    from:
+      snapshot: false
