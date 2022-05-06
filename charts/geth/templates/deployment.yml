@@ -60,10 +60,12 @@ spec:
           ephemeral:
             volumeClaimTemplate:
               spec:
+                {{- if .Values.geth.data.from.snapshot }}
                 dataSource:
                   name: goerli-geth-data-snapshot-latest
                   kind: VolumeSnapshot
                   apiGroup: snapshot.storage.k8s.io
+                {{- end }}
                 accessModes: ["ReadWriteOnce"]
                 resources:
                   requests:

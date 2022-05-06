@@ -1,0 +1,6 @@
+apiVersion: v2
+name: nimbus
+description: Lightweight client for both Ethereum’s consensus layer (eth2) and execution layer (eth1).
+type: application
+version: 0.1.0
+appVersion: "v22.3.0"

@@ -1,9 +1,0 @@
-billing_acct = "billing/XXXXX-XXXXX-XXXXX"
-project_host_vpc = "host-vpc-project-12345"
-project_eth_validator = "eth-validator-12345"
-service_account_project  = "project-id-12345"
-credentials_file         = "path/to/service-account-keys.json"
-org_id                   = 1234567890
-project_owners = [
-    "user:email@example.com"
-  ]

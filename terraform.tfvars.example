@@ -1,0 +1,19 @@
+billing_account         = "billing/XXXXX-XXXXX-XXXXX"
+cluster_name            = "eth-validators"
+cluster_subnet          = "us-east4"
+project_host            = "host-vpc-project"
+project_host_vpc        = "host-vpc-project-10"
+tenant_project_id       = "eth-validator-12345"
+tenant_project_name     = "Project for Eth validator"
+service_account_project = "project-id-12345"
+credentials_file        = "path/to/service-account-keys.json"
+org_id                  = 1234567890
+project_owners = [
+  "user:email@example.com"
+]
+
+
+location = "us-east4-c"
+region   = "us-east4"
+
+worker_node_type = "c2d-highmem-2"
