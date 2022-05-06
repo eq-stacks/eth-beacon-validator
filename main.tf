@@ -72,7 +72,8 @@ module "infrastructure" {
   credentials_file        = var.credentials_file
   location                = var.location
   org_id                  = var.org_id
-  project_eth_validator   = var.project_eth_validator
+  tenant_project_id       = var.tenant_project_id
+  tenant_project_name     = var.tenant_project_name
   project_host            = var.project_host
   project_host_vpc        = var.project_host_vpc
   project_owners          = var.project_owners

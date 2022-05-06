@@ -28,8 +28,13 @@ variable "org_id" {
   type        = string
 }
 
-variable "project_eth_validator" {
-  description = "GCP Project name for Eth Validator project"
+variable "tenant_project_id" {
+  description = "GCP Tenant Project ID"
+  type        = string
+}
+
+variable "tenant_project_name" {
+  description = "GCP Tenant Project Name"
   type        = string
 }
 
